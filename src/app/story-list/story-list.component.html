@@ -1,0 +1,16 @@
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th scope="col">Story</th>
+            <th scope="col">Story Point</th>
+            <th scope="col">Status</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let item of list">
+            <td>{{item.content}}</td>
+            <td>{{item.point}}</td>
+            <td>{{item.status}}</td>
+        </tr>
+    </tbody>
+</table>

@@ -1,0 +1,30 @@
+<div class="container">
+    <form (ngSubmit)="submitForm(planForm.form.value)" #planForm="ngForm">
+        <div class="form-row">
+            <div class="col">
+                <label for="input-session-name">Session Name</label>
+            </div>
+            <div class="col">
+                <input type="text" [(ngModel)]="data.name"  name="name" class="form-control"
+                    id="input-session-name" #name="ngModel" required>
+            </div>
+            <div class="col">
+                <label for="input-number-of-voters">Number of voters</label>
+            </div>
+            <div class="col">
+                <input type="text" [(ngModel)]="data.numberOfVoters"
+                    name="numberOfVoters"
+                    class="form-control" id="input-number-of-voters"  #numberOfVoters="ngModel" required>
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="col">
+                <label for="textarea-story-list">Paste your story list (each line will be converted as a story)</label>
+                <textarea class="form-control" name="storyList" #storyList="ngModel" [(ngModel)]="data.storyList"  id="textarea-story-list" rows="5" required></textarea>
+            </div>
+        </div>
+        <div class="form-row">
+            <button type="submit" class="btn btn-primary" [disabled]="!planForm.form.valid">Start Session</button>
+        </div>
+    </form>
+</div>
