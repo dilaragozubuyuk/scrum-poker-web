@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import * as io from 'socket.io-client';
+import { User } from 'src/app/class/user';
 
 @Injectable({
     providedIn: 'root'
@@ -9,7 +10,9 @@ export class SocketService {
     private url = 'http://localhost:3000';
     private socket: any;
 
-    public data = {};
+    public data = {
+        user: new User()
+    };
 
     connect() {
         this.socket = io(this.url);
@@ -31,19 +34,36 @@ export class SocketService {
                 this.data[id].connectedUser.push({
                     id: count,
                     name: 'Voter ' + count,
-                    type: 'developer'
+                    type: 'developer',
+                    point: 0
                 });
             } else {
                 this.data[id] = { connectedUser: [{
-                    id: 1,
+                    id: count,
                     name: 'Scrum Master ' + 1,
-                    type: 'master'
+                    type: 'master',
+                    point: 0
                 }]};
             }
+
+            this.data.user.id = count;
         });
 
         this.socket.emit('joinRoom', id);
 
+    }
+
+    sendPoint(point: number, id: string) {
+
+        this.socket.on('point', (storyPoint) => {
+            this.data[id].connectedUser.forEach(element => {
+                if (element.id === this.data.user.id) {
+                    element.point = storyPoint;
+                }
+            });
+        });
+
+        this.socket.emit('point', {point, id});
     }
 
     // connectRoom(id) {

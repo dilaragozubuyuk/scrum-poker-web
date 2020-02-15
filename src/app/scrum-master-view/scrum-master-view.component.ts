@@ -25,6 +25,8 @@ export class ScrumMasterViewComponent implements OnInit {
         .subscribe((response) => {
           console.log(response);
           this.session = response;
+          this.socketService.data.user.type = 'Master';
+
           this.setStoryConnectionId().then(
             () => {
               this.startConnection();

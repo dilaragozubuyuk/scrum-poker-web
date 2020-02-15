@@ -3,7 +3,7 @@
     <div *ngIf="socketService.data && socketService.data[id] && id">
         {{socketService.data[id].connectedUserCount}}
         <div class="row" *ngFor="let item of socketService.data[id].connectedUser">
-            <span *ngIf="item.type === 'developer'">{{item.name}}</span>
+            <span>{{item.name}}</span> <span> {{item.point}} </span>
         </div>
     </div>
 </div>

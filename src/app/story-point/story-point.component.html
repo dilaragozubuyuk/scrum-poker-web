@@ -1,6 +1,6 @@
 <div>Points</div>
 <div class="row">
-    <div *ngFor="let item of points" class="col-4">
+    <div *ngFor="let item of points" class="col-4" (click)="sendPoint(item)">
         {{item}}
     </div>
 </div>
