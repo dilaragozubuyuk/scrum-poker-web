@@ -2,13 +2,13 @@
 <div class="container">
     <div class="row">
         <div class="col">
-            <app-story-list [list]="session?.storyList"></app-story-list>
+            <app-story-list [list]="session?.storyList" *ngIf="session?.storyList"></app-story-list>
         </div>
         <div class="col">
             <app-story-point></app-story-point>
         </div>
         <div class="col">
-            <app-panel></app-panel>
+            <app-panel [id]="connectionId" *ngIf="connectionId"></app-panel>
         </div>
     </div>
 </div>

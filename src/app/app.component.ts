@@ -34,6 +34,6 @@ export class AppComponent implements OnInit {
     //     }
     //   );
 
-    //this.socket.sendMessage('hello');
+    this.socket.sendMessage('hello');
   }
 }

@@ -39,7 +39,7 @@ import { UtilsService } from 'src/shared/service/utils.service';
     AuthService,
     SessionService,
     LocalStorageService,
-    UtilsService
+    UtilsService,
   //   {
   //     provide: HTTP_INTERCEPTORS,
   //     useClass: TokenInterceptor,

@@ -1,5 +1,5 @@
 export interface StoryInterface {
-    id: string;
+    _id: string;
     point: number;
     status: string;
     content: string;
