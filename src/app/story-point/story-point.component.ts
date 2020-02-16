@@ -1,6 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { UtilsService } from 'src/shared/service/utils.service';
 import { SocketService } from 'src/shared/service/socket.service';
+import { UserService } from 'src/shared/service/user.service';
 
 @Component({
   selector: 'app-story-point',
@@ -12,6 +13,7 @@ export class StoryPointComponent implements OnInit {
   points: number[];
   @Input() connectionId: string;
   constructor(private utilsService: UtilsService,
+              private userService: UserService,
               private socketService: SocketService) { }
 
   ngOnInit() {
@@ -19,6 +21,6 @@ export class StoryPointComponent implements OnInit {
   }
 
   sendPoint(point) {
-    this.socketService.sendPoint(point, this.connectionId) ;
+    this.socketService.sendPoint(point, this.connectionId, this.userService.user) ;
   }
 }

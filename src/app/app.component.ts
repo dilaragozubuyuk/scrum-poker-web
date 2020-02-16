@@ -19,21 +19,7 @@ export class AppComponent implements OnInit {
 
   ngOnInit() {
     this.socket.connect();
-
-    // this.initService.init().catch((error) => {
-
-    //   console.log(error);
-    // });
-    // this.scrumPokerService.get()
-    //   .subscribe(
-    //     (response) => {
-    //       console.log(response);
-    //     },
-    //     (error) => {
-    //       console.log(error);
-    //     }
-    //   );
-
     this.socket.sendMessage('hello');
   }
+
 }

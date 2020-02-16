@@ -1,4 +1,4 @@
-import { Component, OnInit, Input} from '@angular/core';
+import { Component, OnInit, Input, OnDestroy} from '@angular/core';
 import { SessionService } from 'src/shared/service/session.service';
 import { ActivatedRoute } from '@angular/router';
 import { SessionInterface } from '../interfaces/session.interface';
@@ -11,7 +11,7 @@ import { UtilsService } from 'src/shared/service/utils.service';
   templateUrl: './view.component.html',
   styleUrls: ['./view.component.sass']
 })
-export class ViewComponent implements OnInit {
+export class ViewComponent implements OnInit, OnDestroy {
 
   connectionId: string;
   finalScore: number;
@@ -31,7 +31,6 @@ export class ViewComponent implements OnInit {
     this.setUser();
 
     if (this.activeRoute.snapshot.paramMap.get('sessionId')) {
-      this.socketService.data.user.type = 'Master';
       this.connectionId = this.activeRoute.snapshot.paramMap.get('sessionId');
       this.startConnection();
       this.getSession();
@@ -65,7 +64,10 @@ export class ViewComponent implements OnInit {
 
   public setStoryConnectionId() {
     if (this.session.storyList) {
-      this.activeStoryId = this.session.storyList.find(element => element.status === 'NOT_VOTED')._id;
+      const story = this.session.storyList.find(element => element.status === 'NOT_VOTED')
+      if (story) {
+        this.activeStoryId = story._id;
+      }
 
       this.session.storyList.forEach((element) => {
         if (element._id === this.activeStoryId) {
@@ -97,6 +99,10 @@ export class ViewComponent implements OnInit {
 
         }
       );
+  }
+
+  ngOnDestroy() {
+    this.socketService.leaveRoom(this.connectionId, this.userService.user);
   }
 
 }

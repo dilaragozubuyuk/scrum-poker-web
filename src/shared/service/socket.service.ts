@@ -1,17 +1,23 @@
 import { Injectable } from '@angular/core';
 import * as io from 'socket.io-client';
 import { User } from 'src/app/class/user';
+import { UserService } from './user.service';
+import { UserInterface } from 'src/app/interfaces/user.interfaces';
 
 @Injectable({
     providedIn: 'root'
 })
 export class SocketService {
 
+    constructor(private userService: UserService) {
+
+    }
+
     private url = 'http://localhost:3000';
     private socket: any;
 
     public data = {
-        user: new User()
+        connectedUser: []
     };
 
     public isStoryUpdated = false;
@@ -32,47 +38,38 @@ export class SocketService {
         this.socket.nsp = '/session';
 
         this.socket.on(id, (data) => {
-           console.log(data);
+            console.log(data);
         });
 
-        this.socket.on('joined', (count) => {
-            if (this.data && this.data[id] && this.data[id].connectedUser.length) {
-                this.data[id].connectedUser.push({
-                    id: count,
-                    name: 'Voter ' + count,
-                    type: 'developer',
-                    point: 0
-                });
-            } else {
-                this.data[id] = { connectedUser: [{
-                    id: count,
-                    name: 'Scrum Master ' + 1,
-                    type: 'master',
-                    point: 0
-                }]};
+        this.socket.on('joined', (data) => {
+            if (data.user.type !== 'master') {
+                data.user.name = 'Voter ' + data.count;
             }
 
-            this.data.user.id = count;
+            this.data.connectedUser.push({
+                ...data.user,
+                point: 0
+            });
         });
 
-        this.socket.emit('joinRoom', id);
+        this.socket.emit('joinRoom', {id, user: this.userService.user});
     }
 
-    sendPoint(point: number, id: string) {
+    sendPoint(point: number, id: string, user: UserInterface) {
 
-        this.socket.on('point', (storyPoint) => {
-            this.data[id].connectedUser.forEach(element => {
-                if (element.id === this.data.user.id) {
-                    element.point = storyPoint;
+        this.socket.on('point', (data) => {
+            this.data.connectedUser.forEach(element => {
+                if (element.id === data.user.id) {
+                    element.point = data.point;
                 }
             });
         });
 
-        this.socket.emit('point', {point, id});
+        this.socket.emit('point', { point, id, user });
     }
 
     setFinalScore(finalScore: number, id: string) {
-        this.socket.emit('point', {finalScore, id});
+        this.socket.emit('point', { finalScore, id });
     }
 
     // connectRoom(id) {
@@ -83,6 +80,21 @@ export class SocketService {
     sendMessage(message) {
         this.socket.nsp = '/session';
         this.socket.emit('message', message);
+    }
+
+    leaveRoom(id: string, user: UserInterface) {
+        this.socket.on('leftRoom', (data) => {
+            console.log(data.user.name + 'is left');
+            this.data[id].connectedUser.forEach((key, value) => {
+                console.log(key, value);
+                // if (element.id === data.user.id) {
+                //     element.point = storyPoint;
+                // }
+            });
+        });
+
+        this.socket.nsp = '/session';
+        this.socket.emit('leaveRoom', {id, user});
     }
 
 
