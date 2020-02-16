@@ -1,11 +1,1 @@
-<p>developer works!</p>
-<div class="container">
-    <div class="row">
-        <div class="col">
-            <app-story-list [list]="session?.storyList" *ngIf="session?.storyList"></app-story-list>
-        </div>
-        <div class="col">
-            <app-story-point [id]="connectionId" *ngIf="connectionId"></app-story-point>
-        </div>
-    </div>
-</div>
+<app-view [type]="'developer'"></app-view>

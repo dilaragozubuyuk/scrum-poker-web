@@ -1,14 +1,1 @@
-<p>scrum-master-view works!</p>
-<div class="container">
-    <div class="row">
-        <div class="col">
-            <app-story-list [list]="session?.storyList" *ngIf="session?.storyList"></app-story-list>
-        </div>
-        <div class="col">
-            <app-story-point [connectionId]="connectionId"></app-story-point>
-        </div>
-        <div class="col">
-            <app-panel [id]="connectionId" (finalScore)="updateList($event)" *ngIf="connectionId"></app-panel>
-        </div>
-    </div>
-</div>
+<app-view [type]="'master'"></app-view>

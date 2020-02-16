@@ -1,19 +1,20 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { DeveloperViewComponent } from './developer-view.component';
+import { ViewComponent } from './view.component';
+import { PanelModule } from '../panel/panel.module';
 import { StoryPointModule } from '../story-point/story-point.module';
 import { StoryListModule } from '../story-list/story-list.module';
-import { ViewModule } from '../view/view.module';
 
 
 
 @NgModule({
-  declarations: [DeveloperViewComponent],
+  declarations: [ViewComponent],
   imports: [
     CommonModule,
-    StoryPointModule,
     StoryListModule,
-    ViewModule
-  ]
+    StoryPointModule,
+    PanelModule
+  ],
+  exports: [ViewComponent]
 })
-export class DeveloperViewModule { }
+export class ViewModule { }

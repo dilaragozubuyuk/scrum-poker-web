@@ -15,6 +15,7 @@ import { DeveloperViewModule } from './developer-view/developer-view.module';
 import { PlanModule } from './plan/plan.module';
 import { SessionService } from 'src/shared/service/session.service';
 import { UtilsService } from 'src/shared/service/utils.service';
+import { ViewModule } from './view/view.module';
 
 @NgModule({
   declarations: [
@@ -29,7 +30,7 @@ import { UtilsService } from 'src/shared/service/utils.service';
     AppRoutingModule,
     ScrumMasterViewModule,
     DeveloperViewModule,
-    PlanModule,
+    PlanModule
   ],
   exports: [
     FormsModule,
