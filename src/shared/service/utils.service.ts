@@ -16,6 +16,10 @@ export class UtilsService {
         }
         return list;
     }
+
+    public getId() {
+        return '_' + Math.random().toString(36).substr(2, 9);
+    }
 }
 
 

@@ -3,6 +3,8 @@ import { SessionService } from 'src/shared/service/session.service';
 import { ActivatedRoute } from '@angular/router';
 import { SessionInterface } from '../interfaces/session.interface';
 import { SocketService } from 'src/shared/service/socket.service';
+import { UserService } from 'src/shared/service/user.service';
+import { UtilsService } from 'src/shared/service/utils.service';
 
 @Component({
   selector: 'app-view',
@@ -19,10 +21,15 @@ export class ViewComponent implements OnInit {
 
   constructor(private sessionService: SessionService,
               private socketService: SocketService,
+              private utilsService: UtilsService,
+              private userService: UserService,
               private activeRoute: ActivatedRoute) { }
   session: SessionInterface;
 
   ngOnInit() {
+
+    this.setUser();
+
     if (this.activeRoute.snapshot.paramMap.get('sessionId')) {
       this.socketService.data.user.type = 'Master';
       this.connectionId = this.activeRoute.snapshot.paramMap.get('sessionId');
@@ -33,6 +40,14 @@ export class ViewComponent implements OnInit {
         this.getSession();
       }, 2000);
     }
+  }
+
+  setUser() {
+    this.userService.setUser({
+      id: this.utilsService.getId(),
+      type: this.type,
+      name: this.type === 'developer' ? 'Voter' : 'Scrum Master'
+    });
   }
 
   getSession() {
