@@ -12,6 +12,7 @@ import { SocketService } from 'src/shared/service/socket.service';
 export class DeveloperViewComponent implements OnInit {
   session: SessionInterface;
   connectionId: string;
+  activeStoryId: string;
 
   constructor(private activeRoute: ActivatedRoute,
               private sessionService: SessionService,
@@ -20,39 +21,40 @@ export class DeveloperViewComponent implements OnInit {
   ngOnInit() {
 
     if (this.activeRoute.snapshot.paramMap.get('sessionId')) {
-      console.log(this.activeRoute.snapshot.paramMap.get('sessionId'));
+      this.socketService.data.user.type = 'Master';
+      this.connectionId = this.activeRoute.snapshot.paramMap.get('sessionId');
+      this.startConnection();
+      this.getSession();
 
-      this.sessionService.getSession(this.activeRoute.snapshot.paramMap.get('sessionId'))
-        .subscribe((response) => {
-          console.log(response);
-          this.session = response;
-          this.setStoryConnectionId().then(
-            () => {
-              this.startConnection();
-            },
-            () => {
-              //TODO
-            }
-          );
-        },
-          (error) => {
-            console.log(error);
-          });
+      setInterval(() => {
+          this.getSession();
+      }, 2000);
     }
   }
 
-  public setStoryConnectionId() {
-    return new Promise((resolve, reject) => {
-      if (this.session.storyList) {
-        this.connectionId = this.session.storyList.find(element => element.status === 'NOT_VOTED')._id;
-      }
+  getSession() {
+    this.sessionService.getSession(this.activeRoute.snapshot.paramMap.get('sessionId'))
+      .subscribe((response) => {
+        console.log(response);
+        this.session = response;
 
-      if (this.connectionId) {
-        resolve(true);
-      } else {
-        reject(true);
-      }
-    });
+        this.setStoryConnectionId();
+      },
+        (error) => {
+          console.log(error);
+        });
+  }
+
+  public setStoryConnectionId() {
+    if (this.session.storyList) {
+      this.activeStoryId = this.session.storyList.find(element => element.status === 'NOT_VOTED')._id;
+
+      this.session.storyList.forEach((element) => {
+        if (element._id === this.activeStoryId) {
+          element.status = 'ACTIVE';
+        }
+      });
+    }
   }
 
   public startConnection() {

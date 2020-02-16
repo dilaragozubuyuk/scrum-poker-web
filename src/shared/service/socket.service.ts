@@ -14,8 +14,14 @@ export class SocketService {
         user: new User()
     };
 
+    public isStoryUpdated = false;
+
     connect() {
         this.socket = io(this.url);
+    }
+
+    setIsStoryUpdated(value: boolean) {
+        this.isStoryUpdated = value;
     }
 
     setUser(id) {

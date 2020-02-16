@@ -12,6 +12,7 @@ import { SocketService } from 'src/shared/service/socket.service';
 export class ScrumMasterViewComponent implements OnInit {
   connectionId: string;
   finalScore: number;
+  activeStoryId: string;
 
   constructor(private sessionService: SessionService,
     private socketService: SocketService,
@@ -20,47 +21,40 @@ export class ScrumMasterViewComponent implements OnInit {
 
   ngOnInit() {
     if (this.activeRoute.snapshot.paramMap.get('sessionId')) {
-      console.log(this.activeRoute.snapshot.paramMap.get('sessionId'));
+      this.socketService.data.user.type = 'Master';
+      this.connectionId = this.activeRoute.snapshot.paramMap.get('sessionId');
+      this.startConnection();
+      this.getSession();
 
-      this.sessionService.getSession(this.activeRoute.snapshot.paramMap.get('sessionId'))
-        .subscribe((response) => {
-          console.log(response);
-          this.session = response;
-          this.socketService.data.user.type = 'Master';
-
-          setInterval(() => {
-            this.setStoryConnectionId().then(
-              (res: string) => {
-                if (res !== this.connectionId) {
-                  this.connectionId = res;
-                  this.startConnection();
-                }
-              },
-              () => {
-                //TODO
-              }
-            );
-          }, 2000);
-        },
-          (error) => {
-            console.log(error);
-          });
+      setInterval(() => {
+          this.getSession();
+      }, 2000);
     }
   }
 
-  public setStoryConnectionId() {
-    return new Promise((resolve, reject) => {
-      let id;
-      if (this.session.storyList) {
-        id = this.session.storyList.find(element => element.status === 'NOT_VOTED')._id;
-      }
+  getSession() {
+    this.sessionService.getSession(this.activeRoute.snapshot.paramMap.get('sessionId'))
+      .subscribe((response) => {
+        console.log(response);
+        this.session = response;
 
-      if (id) {
-        resolve(id);
-      } else {
-        reject(true);
-      }
-    });
+        this.setStoryConnectionId();
+      },
+        (error) => {
+          console.log(error);
+        });
+  }
+
+  public setStoryConnectionId() {
+    if (this.session.storyList) {
+      this.activeStoryId = this.session.storyList.find(element => element.status === 'NOT_VOTED')._id;
+
+      this.session.storyList.forEach((element) => {
+        if (element._id === this.activeStoryId) {
+          element.status = 'ACTIVE';
+        }
+      });
+    }
   }
 
   public startConnection() {
@@ -70,7 +64,7 @@ export class ScrumMasterViewComponent implements OnInit {
 
   public updateList(finalScore) {
     this.session.storyList.forEach((element) => {
-      if (element._id === this.connectionId) {
+      if (element._id === this.activeStoryId) {
         element.point = finalScore;
         element.status = 'VOTED';
       }

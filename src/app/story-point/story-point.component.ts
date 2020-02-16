@@ -10,7 +10,7 @@ import { SocketService } from 'src/shared/service/socket.service';
 export class StoryPointComponent implements OnInit {
 
   points: number[];
-  @Input() id: string;
+  @Input() connectionId: string;
   constructor(private utilsService: UtilsService,
               private socketService: SocketService) { }
 
@@ -19,6 +19,6 @@ export class StoryPointComponent implements OnInit {
   }
 
   sendPoint(point) {
-    this.socketService.sendPoint(point, this.id) ;
+    this.socketService.sendPoint(point, this.connectionId) ;
   }
 }
