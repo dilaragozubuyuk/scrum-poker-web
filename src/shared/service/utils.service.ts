@@ -20,6 +20,10 @@ export class UtilsService {
     public getId() {
         return '_' + Math.random().toString(36).substr(2, 9);
     }
+
+    public removeSpaces(list: string) {
+        return list.split('\n').filter(item => item !== '');
+    }
 }
 
 

@@ -1,26 +1,22 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { SessionService } from 'src/shared/service/session.service';
 import { Router } from '@angular/router';
+import { UtilsService } from 'src/shared/service/utils.service';
 
 @Component({
   selector: 'app-plan',
   templateUrl: './plan.component.html',
-  styleUrls: ['./plan.component.sass']
+  styles: ['.container { padding-top: 40px }']
 })
-export class PlanComponent implements OnInit {
-
+export class PlanComponent {
   data = {};
   constructor(private sessionService: SessionService,
-              private router: Router) { }
-
-  ngOnInit() {
-  }
+    private utilsService: UtilsService,
+    private router: Router) { }
 
   submitForm(form) {
-    console.log(form);
-    const list = form.storyList.split('\n').filter(item => item !== ''); //utils service
+    const list = this.utilsService.removeSpaces(form.storyList);
 
-    console.log(list);
     const data = [];
 
     list.forEach(element => {
@@ -35,13 +31,10 @@ export class PlanComponent implements OnInit {
     this.sessionService.createSession(form)
       .subscribe(
         (response) => {
-          //this.sessionService.setSession(response.data);
-          this.router.navigate(['/poker-planning-view-as-scrum-master/' + response.data.id]);
-          console.log(response);
+          this.router.navigate(['/poker-planning-view-as-scrum-master/' + response.data._id]);
         }, (error) => {
           console.log(error);
         }
       );
-
   }
 }

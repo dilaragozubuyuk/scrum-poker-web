@@ -34,28 +34,12 @@ export class SocketService {
         this.socket.emit('setUser', id);
     }
 
-    createRoom(id: string) {
+    createRoom(id: string, maxUser: number) {
         this.socket.nsp = '/session';
 
         this.socket.on(id, (data) => {
             console.log(data);
         });
-
-        this.socket.on('joined', (data) => {
-            if (data.user.type !== 'master') {
-                data.user.name = 'Voter ' + data.count;
-            }
-
-            this.data.connectedUser.push({
-                ...data.user,
-                point: 0
-            });
-        });
-
-        this.socket.emit('joinRoom', {id, user: this.userService.user});
-    }
-
-    sendPoint(point: number, id: string, user: UserInterface) {
 
         this.socket.on('point', (data) => {
             this.data.connectedUser.forEach(element => {
@@ -65,7 +49,18 @@ export class SocketService {
             });
         });
 
-        this.socket.emit('point', { point, id, user });
+        this.socket.on('joined', (data) => {
+            this.data.connectedUser.push({
+                ...data.user,
+                point: 0
+            });
+        });
+
+        this.socket.emit('joinRoom', {id, user: this.userService.user, maxUser});
+    }
+
+    sendPoint(point: any, id: string) {
+        this.socket.emit('point', { point, id, user: this.userService.user});
     }
 
     setFinalScore(finalScore: number, id: string) {

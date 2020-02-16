@@ -1,14 +1,17 @@
-<div class="container">
-    <div class="row">
+<div class="container view">
+    <div class="row link">
+        <span class='link-text'>Please share this link of developers panel to the teammates:</span>
+        <b>{{link}}</b>
+    </div>
+    <div class="row" *ngIf="session?.storyList">
         <div class="col">
-            <app-story-list [list]="session?.storyList" *ngIf="session?.storyList"></app-story-list>
+            <app-story-list [list]="session?.storyList"></app-story-list>
         </div>
         <div class="col">
             <app-story-point [connectionId]="connectionId"></app-story-point>
         </div>
-        {{type}}
         <div class="col" *ngIf="type == 'master'">
-            <app-panel [id]="connectionId" (finalScore)="updateList($event)" *ngIf="connectionId"></app-panel>
+            <app-panel [activeStoryName]="activeStoryName" [id]="connectionId" [maxUser]="session?.numberOfVoters" (finalScore)="updateList($event)" *ngIf="connectionId"></app-panel>
         </div>
     </div>
 </div>

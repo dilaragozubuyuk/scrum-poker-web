@@ -1,0 +1,20 @@
+.container {
+    min-height: 281px !important;
+    width: 320px !important;
+    border: solid 1px;
+
+    .final-score-form {
+        padding-top: 20px;
+    }
+
+    .btn-primary {
+        float: left;
+    }
+
+    .warning {
+        padding-top: 10px;
+        float: left;
+        font-size: 11px;
+    }
+
+}

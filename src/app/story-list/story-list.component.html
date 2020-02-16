@@ -10,7 +10,7 @@
         <tr *ngFor="let item of list">
             <td>{{item.content}}</td>
             <td>{{item.point}}</td>
-            <td>{{item.status}}</td>
+            <td>{{item.status | statusPipe}} </td>
         </tr>
     </tbody>
 </table>

@@ -1,16 +1,32 @@
 <div class="container">
+    <div class="row">
+        <div class="col">
+            <span>{{activeStoryName}} is active</span>
+        </div>
+    </div>
     <div *ngIf="socketService.data && socketService.data && id">
         <div class="row" *ngFor="let item of socketService.data.connectedUser">
-            <span>{{item.name}}</span> <span> {{item.point}} </span>
-        </div>
-
-        <form (ngSubmit)="submitForm(scoreForm.form.value)" #scoreForm="ngForm">
-            <div class="form-row">
-                <input type="text" [(ngModel)]="score" name="name" class="form-control"
-                    id="input-session-name" #finalScore="ngModel" required>
+            <div class="col">* {{item.name}} :</div>
+            <div class="col">
+                <span *ngIf="item.point"> {{item.point}}</span>
+                <span *ngIf="!item.point">Not voted</span>
             </div>
-            <div class="form-row">
-                <button type="submit" class="btn btn-primary" [disabled]="!scoreForm.form.valid">Start Session</button>
+        </div>
+        <div class="row">
+            <div class="col">
+                Max person count is {{maxUser}}
+            </div>
+        </div>
+        <form class="final-score-form" (ngSubmit)="submitForm(scoreForm.form.value)" #scoreForm="ngForm">
+            <div class="form-row form-group">
+                <input type="text" *ngIf="!checkNotVotedStory()" type="number" [(ngModel)]="score" name="score" class="form-control" id="input-session-name"
+                    #finalScore="ngModel" required>
+            </div>
+            <button type="submit" class="btn btn-primary" [disabled]="checkNotVotedStory() || !scoreForm.form.valid">End Voting For {{activeStoryName}}</button>
+            <div class="col warning" *ngIf="checkNotVotedStory()">
+                <span>
+                    You can not end voting till each teammate voted
+                </span>
             </div>
         </form>
     </div>

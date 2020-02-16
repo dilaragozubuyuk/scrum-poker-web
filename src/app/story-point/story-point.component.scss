@@ -1,0 +1,24 @@
+
+
+
+.point {
+    width: 70px !important;
+    height: 70px !important;
+    text-align: center;
+    color: black;
+    border: solid 0.5px;
+    cursor: pointer;
+
+    span {
+        line-height: 70px;
+    }
+
+    &:hover {
+        background-color: #d9baba;
+    }
+}
+
+.given-point {
+    text-align: center;
+    line-height: 47px;
+}

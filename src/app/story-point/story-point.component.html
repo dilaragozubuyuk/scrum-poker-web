@@ -1,6 +1,12 @@
-<div>Points</div>
 <div class="row">
-    <div *ngFor="let item of points" class="col-4" (click)="sendPoint(item)">
-        {{item}}
+    <div *ngFor="let item of points" class="col-4 point" (click)="sendPoint(item)">
+        <span>{{item}}</span>
+    </div>
+    <div class="col-4 point" (click)="sendPoint('?')">
+        <span >?</span>
+    </div>
+
+    <div class="col given-point">
+        <span *ngIf="givenPoint">{{givenPoint}} Voted</span>
     </div>
 </div>
