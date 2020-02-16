@@ -8,7 +8,7 @@
             <app-story-point [id]="connectionId" *ngIf="connectionId"></app-story-point>
         </div>
         <div class="col">
-            <app-panel [id]="connectionId" *ngIf="connectionId"></app-panel>
+            <app-panel [id]="connectionId" (finalScore)="updateList($event)" *ngIf="connectionId"></app-panel>
         </div>
     </div>
 </div>

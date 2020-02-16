@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { SocketService } from 'src/shared/service/socket.service';
 
 @Component({
@@ -9,14 +9,16 @@ import { SocketService } from 'src/shared/service/socket.service';
 export class PanelComponent implements OnInit {
 
   @Input() id: any;
-  userCount = 0;
+  @Output() finalScore: any = new EventEmitter();
   constructor(public socketService: SocketService) { }
 
   ngOnInit() {
-    console.log('uuu', this.id);
-    // this.socketService.socket.on(this.id, () => {
-    //   this.userCount++;
-    // });
+
   }
 
+  submitForm(value: any) {
+    this.finalScore.emit(Number(value.name));
+
+    //this.socketService.setFinalScore(value, this.id);
+  }
 }

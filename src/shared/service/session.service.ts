@@ -51,4 +51,7 @@ export class SessionService {
         return this.http.post<any>(`${this.url}/session`, params);
     }
 
+    updateSession(params): Observable<any> {
+        return this.http.put<any>(`${this.url}/session`, params);
+    }
 }

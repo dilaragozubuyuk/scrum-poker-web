@@ -21,5 +21,4 @@ export class StoryPointComponent implements OnInit {
   sendPoint(point) {
     this.socketService.sendPoint(point, this.id) ;
   }
-
 }

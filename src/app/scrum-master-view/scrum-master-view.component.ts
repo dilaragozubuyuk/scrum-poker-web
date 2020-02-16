@@ -11,10 +11,11 @@ import { SocketService } from 'src/shared/service/socket.service';
 })
 export class ScrumMasterViewComponent implements OnInit {
   connectionId: string;
+  finalScore: number;
 
   constructor(private sessionService: SessionService,
-              private socketService: SocketService,
-              private activeRoute: ActivatedRoute) { }
+    private socketService: SocketService,
+    private activeRoute: ActivatedRoute) { }
   session: SessionInterface;
 
   ngOnInit() {
@@ -27,29 +28,35 @@ export class ScrumMasterViewComponent implements OnInit {
           this.session = response;
           this.socketService.data.user.type = 'Master';
 
-          this.setStoryConnectionId().then(
-            () => {
-              this.startConnection();
-            },
-            () => {
-            //TODO
-            }
-          );
+          setInterval(() => {
+            this.setStoryConnectionId().then(
+              (res: string) => {
+                if (res !== this.connectionId) {
+                  this.connectionId = res;
+                  this.startConnection();
+                }
+              },
+              () => {
+                //TODO
+              }
+            );
+          }, 2000);
         },
-        (error) => {
-          console.log(error);
-        });
+          (error) => {
+            console.log(error);
+          });
     }
   }
 
   public setStoryConnectionId() {
     return new Promise((resolve, reject) => {
+      let id;
       if (this.session.storyList) {
-        this.connectionId = this.session.storyList.find(element => element.status === 'NOT_VOTED')._id;
+        id = this.session.storyList.find(element => element.status === 'NOT_VOTED')._id;
       }
 
-      if (this.connectionId) {
-        resolve(true);
+      if (id) {
+        resolve(id);
       } else {
         reject(true);
       }
@@ -59,6 +66,25 @@ export class ScrumMasterViewComponent implements OnInit {
   public startConnection() {
     this.socketService.setUser(this.connectionId);
     this.socketService.createRoom(this.connectionId);
+  }
+
+  public updateList(finalScore) {
+    this.session.storyList.forEach((element) => {
+      if (element._id === this.connectionId) {
+        element.point = finalScore;
+        element.status = 'VOTED';
+      }
+    });
+
+    this.sessionService.updateSession(this.session)
+      .subscribe(
+        (res) => {
+          this.session = res.data;
+        },
+        () => {
+
+        }
+      );
   }
 
 }

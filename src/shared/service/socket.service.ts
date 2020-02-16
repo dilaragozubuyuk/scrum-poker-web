@@ -50,7 +50,6 @@ export class SocketService {
         });
 
         this.socket.emit('joinRoom', id);
-
     }
 
     sendPoint(point: number, id: string) {
@@ -64,6 +63,10 @@ export class SocketService {
         });
 
         this.socket.emit('point', {point, id});
+    }
+
+    setFinalScore(finalScore: number, id: string) {
+        this.socket.emit('point', {finalScore, id});
     }
 
     // connectRoom(id) {
