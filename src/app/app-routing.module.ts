@@ -6,6 +6,11 @@ import { PlanComponent } from './plan/plan.component';
 
 const routes: Routes = [
   {
+    path: '',
+    redirectTo: 'poker-planning-add-story-list',
+    pathMatch: 'full'
+  },
+  {
     path: 'poker-planning-view-as-scrum-master/:sessionId',
     component: ScrumMasterViewComponent
   },
